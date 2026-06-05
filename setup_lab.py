@@ -99,3 +99,28 @@ models         -> modelli
 if __name__ == "__main__":
     crea_laboratorio()
     crea_readme()
+
+    from pathlib import Path
+
+def crea_progetto(nome_progetto):
+    
+    root = Path.cwd()
+    progetto = root / "projects" / nome_progetto
+    
+    sottocartelle = [
+        progetto / "data",
+        progetto / "notebooks",
+        progetto / "outputs",
+    ]
+    
+    for cartella in sottocartelle:
+        cartella.mkdir(parents=True, exist_ok=True)
+    
+    readme = progetto / "README.md"
+    readme.write_text(f"# {nome_progetto}\n\nDescrizione del progetto.\n", encoding="utf-8")
+    
+    print(f"Progetto '{nome_progetto}' creato correttamente.")
+
+if __name__ == "__main__":
+    crea_progetto("2026_06_Teleriscaldamento_Torino_EC")
+    
