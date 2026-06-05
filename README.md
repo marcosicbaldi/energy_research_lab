@@ -1,29 +1,34 @@
 # Energy Research Lab
 
-Repository per ricerca e analisi dei sistemi energetici.
+Personal research environment for energy systems analysis.
 
-## Fonti dati
+## Research Areas
 
-- Terna
-- ARERA
-- GSE
-- GME
-- ISTAT
-- Eurostat
+- Renewable energy
+- Photovoltaics
+- Energy Communities (CER)
+- Energy policy
+- Energy data analytics
 
-## Workflow
+## Tools
 
-1. Acquisizione dati
-2. Pulizia dati
-3. Analisi
-4. Modellazione
-5. Visualizzazione
-6. Reportistica
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Git
+- GitHub
 
-## Struttura
+## Repository Structure
 
-data/raw       -> dati originali
-data/processed -> dati elaborati
-projects       -> progetti di ricerca
-outputs        -> risultati
-models         -> modelli
+```text
+data/       -> datasets
+projects/   -> research projects
+models/     -> simulation models
+outputs/    -> results
+docs/       -> documentation
+```
+
+## Status
+
+Project under development.
