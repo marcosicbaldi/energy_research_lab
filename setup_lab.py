@@ -35,13 +35,10 @@ def crea_laboratorio():
     root = Path.cwd()
 
     cartelle = [
-        root / "data",
-        root / "workspace",
+        root / "01_workspace",
+        root / "02_data",
+        root / "03_archive",
         root / "src",
-        root / "models",
-        root / "outputs",
-        root / "docs",
-        root / "archive",
     ]
 
     crea_cartelle(cartelle)
@@ -59,15 +56,15 @@ def crea_anni(lista_anni):
 
         cartelle = []
 
-        # data/anno/fonti
+        # 02_data/<anno>/<fonte>
         for fonte in FONTI_DATI:
             cartelle.append(
-                root / "data" / anno / fonte
+                root / "02_data" / anno / fonte
             )
 
-        # workspace/anno
+        # 01_workspace/<anno>
         cartelle.append(
-            root / "workspace" / anno
+            root / "01_workspace" / anno
         )
 
         crea_cartelle(cartelle)
@@ -81,19 +78,21 @@ def crea_anni(lista_anni):
 def verifica_coerenza_anno(anno):
     root = Path.cwd()
 
-    data_path = root / "data" / anno
-    workspace_path = root / "workspace" / anno
+    data_path = root / "02_data" / anno
+    workspace_path = root / "01_workspace" / anno
 
     if not data_path.exists():
-        print(f"⚠ Creazione automatica: data/{anno}")
+        print(f"⚠ Creazione automatica: 02_data/{anno}")
 
-        crea_cartelle([
-            data_path / fonte
-            for fonte in FONTI_DATI
-        ])
+        crea_cartelle(
+            [
+                data_path / fonte
+                for fonte in FONTI_DATI
+            ]
+        )
 
     if not workspace_path.exists():
-        print(f"⚠ Creazione automatica: workspace/{anno}")
+        print(f"⚠ Creazione automatica: 01_workspace/{anno}")
 
         workspace_path.mkdir(
             parents=True,
@@ -116,15 +115,17 @@ def crea_progetto(anno, nome, data_sources=None):
 
     progetto = (
         root
-        / "workspace"
+        / "01_workspace"
         / anno
         / nome
     )
 
     cartelle = [
         progetto / "notebooks",
+        progetto / "notebooks" / "docs",
+        progetto / "notebooks" / "reports",
+        progetto / "models",
         progetto / "outputs",
-        progetto / "docs",
         progetto / "src",
     ]
 
@@ -178,7 +179,7 @@ def migra_projects_to_workspace():
     root = Path.cwd()
 
     old = root / "projects"
-    new = root / "workspace"
+    new = root / "01_workspace"
 
     if not old.exists():
         print(
@@ -188,14 +189,14 @@ def migra_projects_to_workspace():
 
     if new.exists():
         print(
-            "⚠ workspace esiste già. Migrazione annullata."
+            "⚠ 01_workspace esiste già. Migrazione annullata."
         )
         return
 
     shutil.move(str(old), str(new))
 
     print(
-        "✓ Migrazione completata: projects → workspace"
+        "✓ Migrazione completata: projects → 01_workspace"
     )
 
 
