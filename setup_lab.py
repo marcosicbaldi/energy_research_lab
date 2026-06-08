@@ -38,7 +38,7 @@ def crea_laboratorio():
         root / "01_Progetti",
         root / "02_data",
         root / "03_archive",
-        root / "src",
+        root / "04_src",
     ]
 
     crea_cartelle(cartelle)
@@ -140,7 +140,7 @@ def crea_progetto(
         progetto / "notebooks" / "reports",
         progetto / "notebooks" / "outputs",
         progetto / "models",
-        progetto / "src",
+        progetto / "04_src",
     ]
 
     crea_cartelle(cartelle)
