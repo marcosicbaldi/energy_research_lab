@@ -53,47 +53,5 @@ def crea_laboratorio():
     print("✓ Struttura laboratorio creata")
 
 
-def crea_readme():
-    """Genera il README principale."""
-
-    testo = f"""# Energy Research Lab
-
-Repository per ricerca, analisi e modellazione dei sistemi energetici.
-
-## Obiettivi
-
-Questo repository raccoglie dati, codice, notebook e risultati relativi ad attività di ricerca in ambito energetico.
-
-## Fonti dati
-
-- Terna
-- ARERA
-- GSE
-- GME
-- ISTAT
-- Eurostat
-
-## Workflow
-
-1. Acquisizione dati
-2. Pulizia e validazione
-3. Analisi esplorativa
-4. Modellazione
-5. Visualizzazione
-6. Reportistica e disseminazione
-
-## Struttura del repository
-
-```text
-.
-├── archive/
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── reference/
-├── docs/
-├── models/
-├── notebooks/
-├── outputs/
-├── projects/
-└── src/
+if __name__ == "__main__":
+    crea_laboratorio()
