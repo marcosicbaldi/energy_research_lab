@@ -2,7 +2,12 @@ from pathlib import Path
 from datetime import datetime
 import argparse
 import json
-
+STRUCTURE = {
+    "projects": "01_Progetti",
+    "data": "02_data",
+    "archive": "03_archive",
+    "src": "04_src",
+}
 
 FONTI_DATI = [
     "terna",
