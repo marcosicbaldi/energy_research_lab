@@ -1,6 +1,10 @@
-# 2024_progetto_a
+# progetto_a
 
-Anno: 2024
+## Anno
+2024
 
 ## Obiettivo
+Da definire.
+
+## Dataset utilizzati
 Da definire.

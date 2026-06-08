@@ -2,7 +2,6 @@ from pathlib import Path
 from datetime import datetime
 import argparse
 import json
-import shutil
 
 
 FONTI_DATI = [
@@ -32,10 +31,11 @@ def formatta_nome(nome):
 # Inizializzazione laboratorio
 # --------------------------------------------------
 def crea_laboratorio():
+
     root = Path.cwd()
 
     cartelle = [
-        root / "01_workspace",
+        root / "01_Progetti",
         root / "02_data",
         root / "03_archive",
         root / "src",
@@ -50,21 +50,22 @@ def crea_laboratorio():
 # Creazione anni
 # --------------------------------------------------
 def crea_anni(lista_anni):
+
     root = Path.cwd()
 
     for anno in lista_anni:
 
         cartelle = []
 
-        # 02_data/<anno>/<fonte>
+        # dati
         for fonte in FONTI_DATI:
             cartelle.append(
                 root / "02_data" / anno / fonte
             )
 
-        # 01_workspace/<anno>
+        # progetti
         cartelle.append(
-            root / "01_workspace" / anno
+            root / "01_Progetti" / anno
         )
 
         crea_cartelle(cartelle)
@@ -76,13 +77,13 @@ def crea_anni(lista_anni):
 # Verifica coerenza
 # --------------------------------------------------
 def verifica_coerenza_anno(anno):
+
     root = Path.cwd()
 
     data_path = root / "02_data" / anno
-    workspace_path = root / "01_workspace" / anno
+    projects_path = root / "01_Progetti" / anno
 
     if not data_path.exists():
-        print(f"⚠ Creazione automatica: 02_data/{anno}")
 
         crea_cartelle(
             [
@@ -91,41 +92,54 @@ def verifica_coerenza_anno(anno):
             ]
         )
 
-    if not workspace_path.exists():
-        print(f"⚠ Creazione automatica: 01_workspace/{anno}")
+        print(
+            f"⚠ Creata struttura dati per {anno}"
+        )
 
-        workspace_path.mkdir(
+    if not projects_path.exists():
+
+        projects_path.mkdir(
             parents=True,
             exist_ok=True
         )
 
-    print(f"✓ Coerenza verificata per {anno}")
+        print(
+            f"⚠ Creata struttura progetti per {anno}"
+        )
+
+    print(f"✓ Coerenza verificata: {anno}")
 
 
 # --------------------------------------------------
 # Creazione progetto
 # --------------------------------------------------
-def crea_progetto(anno, nome, data_sources=None):
+def crea_progetto(
+    anno,
+    nome_progetto,
+    data_sources=None
+):
 
     root = Path.cwd()
 
     verifica_coerenza_anno(anno)
 
-    nome = formatta_nome(nome)
+    nome_progetto = formatta_nome(
+        nome_progetto
+    )
 
     progetto = (
         root
-        / "01_workspace"
+        / "01_Progetti"
         / anno
-        / nome
+        / nome_progetto
     )
 
     cartelle = [
         progetto / "notebooks",
         progetto / "notebooks" / "docs",
         progetto / "notebooks" / "reports",
+        progetto / "notebooks" / "outputs",
         progetto / "models",
-        progetto / "outputs",
         progetto / "src",
     ]
 
@@ -134,19 +148,22 @@ def crea_progetto(anno, nome, data_sources=None):
     readme = progetto / "README.md"
 
     readme.write_text(
-        f"""# {nome}
+        f"""# {nome_progetto}
 
 ## Anno
 {anno}
 
 ## Obiettivo
 Da definire.
+
+## Dataset utilizzati
+Da definire.
 """,
         encoding="utf-8",
     )
 
     metadata = {
-        "nome": nome,
+        "nome": nome_progetto,
         "anno": anno,
         "creato_il": datetime.now().isoformat(),
         "status": "active",
@@ -167,36 +184,7 @@ Da definire.
         )
 
     print(
-        f"✓ Progetto creato: {anno}/{nome}"
-    )
-
-
-# --------------------------------------------------
-# Migrazione
-# --------------------------------------------------
-def migra_projects_to_workspace():
-
-    root = Path.cwd()
-
-    old = root / "projects"
-    new = root / "01_workspace"
-
-    if not old.exists():
-        print(
-            "✓ Nessuna cartella projects da migrare"
-        )
-        return
-
-    if new.exists():
-        print(
-            "⚠ 01_workspace esiste già. Migrazione annullata."
-        )
-        return
-
-    shutil.move(str(old), str(new))
-
-    print(
-        "✓ Migrazione completata: projects → 01_workspace"
+        f"✓ Progetto creato: {anno}/{nome_progetto}"
     )
 
 
@@ -234,11 +222,6 @@ def main():
         "--check"
     )
 
-    parser.add_argument(
-        "--migrate",
-        action="store_true"
-    )
-
     args = parser.parse_args()
 
     if args.init:
@@ -248,6 +231,7 @@ def main():
         crea_anni(args.years)
 
     if args.project:
+
         anno, nome = args.project
 
         crea_progetto(
@@ -260,9 +244,6 @@ def main():
         verifica_coerenza_anno(
             args.check
         )
-
-    if args.migrate:
-        migra_projects_to_workspace()
 
 
 if __name__ == "__main__":

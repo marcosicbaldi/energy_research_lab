@@ -1,8 +1,7 @@
 {
-    "nome": "teleriscaldamento",
+    "nome": "progetto_a",
     "anno": "2026",
-    "id": "2026_teleriscaldamento",
-    "created_at": "2026-06-08T14:03:11.509608",
+    "creato_il": "2026-06-08T18:06:35.493549",
     "status": "active",
     "data_sources": []
 }
