@@ -1,17 +1,12 @@
-# Teleriscaldamento_Torino_EC
+# teleriscaldamento_torino_ec
 
-## Anno
-2026
+Anno: 2026
 
 ## Obiettivo
-Descrizione del progetto.
+Da definire.
 
 ## Struttura
-- data: input del progetto
-- notebooks: analisi
-- outputs: risultati
-- docs: documentazione
-- src: codice
-
-## Stato
-In sviluppo
+- notebooks
+- outputs
+- docs
+- src

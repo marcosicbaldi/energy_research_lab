@@ -1,18 +1,28 @@
 from pathlib import Path
+from datetime import datetime
+import argparse
+import logging
+
+
+# -------------------------
+# LOGGING
+# -------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 def crea_cartelle(cartelle):
-    """Crea una lista di cartelle."""
     for cartella in cartelle:
         cartella.mkdir(parents=True, exist_ok=True)
+        logging.info(f"Creata cartella: {cartella}")
 
 
 # -------------------------
-# LIVELLO 1: LABORATORIO
+# LABORATORIO
 # -------------------------
 def crea_laboratorio():
-    """Crea la struttura base del laboratorio (una sola volta)."""
-
     root = Path.cwd()
 
     cartelle = [
@@ -30,27 +40,16 @@ def crea_laboratorio():
     ]
 
     crea_cartelle(cartelle)
-
-    print("✓ Laboratorio creato")
+    logging.info("Laboratorio inizializzato")
 
 
 # -------------------------
-# LIVELLO 2: ANNO
+# ANNO
 # -------------------------
 def crea_anno(anno: str):
-    """Crea la struttura per un anno specifico."""
-
     root = Path.cwd()
 
-    fonti_dati = [
-        "terna",
-        "arera",
-        "gse",
-        "gme",
-        "istat",
-        "eurostat",
-        "reference",
-    ]
+    fonti = ["terna", "arera", "gse", "gme", "istat", "eurostat", "reference"]
 
     cartelle = [
         root / "data" / anno,
@@ -60,30 +59,28 @@ def crea_anno(anno: str):
         root / "years" / anno / "notes",
     ]
 
-    cartelle.extend(
-        [
-            root / "data" / anno / fonte
-            for fonte in fonti_dati
-        ]
-    )
+    cartelle.extend([root / "data" / anno / f for f in fonti])
 
     crea_cartelle(cartelle)
-
-    print(f"✓ Anno {anno} creato")
+    logging.info(f"Anno creato: {anno}")
 
 
 # -------------------------
-# LIVELLO 3: PROGETTO
+# PROGETTO
 # -------------------------
+def formatta_nome_progetto(nome: str) -> str:
+    """Naming convention standardizzata."""
+    return nome.strip().lower().replace(" ", "_")
+
+
 def crea_progetto(anno: str, nome_progetto: str):
-    """Crea un progetto dentro un anno specifico."""
-
     root = Path.cwd()
+
+    nome_progetto = formatta_nome_progetto(nome_progetto)
 
     progetto = root / "years" / anno / "projects" / nome_progetto
 
     cartelle = [
-        progetto / "data",
         progetto / "notebooks",
         progetto / "outputs",
         progetto / "docs",
@@ -93,38 +90,47 @@ def crea_progetto(anno: str, nome_progetto: str):
     crea_cartelle(cartelle)
 
     readme = progetto / "README.md"
-
     readme.write_text(
         f"""# {nome_progetto}
 
-## Anno
-{anno}
+Anno: {anno}
 
 ## Obiettivo
-Descrizione del progetto.
+Da definire.
 
 ## Struttura
-- data: input del progetto
-- notebooks: analisi
-- outputs: risultati
-- docs: documentazione
-- src: codice
-
-## Stato
-In sviluppo
+- notebooks
+- outputs
+- docs
+- src
 """,
-        encoding="utf-8",
+        encoding="utf-8"
     )
 
-    print(f"✓ Progetto '{nome_progetto}' creato in {anno}")
+    logging.info(f"Progetto creato: {nome_progetto} ({anno})")
 
 
 # -------------------------
-# ESECUZIONE BASE
+# CLI
 # -------------------------
+def main():
+    parser = argparse.ArgumentParser(description="Energy Research Lab Setup")
+
+    parser.add_argument("--init", action="store_true", help="Crea laboratorio base")
+    parser.add_argument("--year", type=str, help="Crea struttura anno")
+    parser.add_argument("--project", nargs=2, metavar=("ANNO", "NOME"), help="Crea progetto")
+
+    args = parser.parse_args()
+
+    if args.init:
+        crea_laboratorio()
+
+    if args.year:
+        crea_anno(args.year)
+
+    if args.project:
+        crea_progetto(args.project[0], args.project[1])
+
+
 if __name__ == "__main__":
-    crea_laboratorio()
-
-    # esempio di utilizzo (puoi modificarlo o commentarlo)
-    crea_anno("2026")
-    crea_progetto("2026", "Teleriscaldamento_Torino_EC")
+    main()
